@@ -1,8 +1,125 @@
 # Biblioteca para pausar o tempo da execução do programa
 import time
-
 # Bibliotece para limpar a tela do terminal
 import os
+
+def verificar_numero_cpf(*, cpf):
+    if cpf.isnumeric() == True:
+        return True
+    else:
+        print("Insira somente números!")
+        time.sleep(2)
+        os.system("cls")
+        return False
+
+
+def verificar_existe_cpf(cpf, usuarios):
+    for usuario in usuarios:
+        if cpf != usuario['cpf']:
+            pass
+        else:
+            print("Este CPF já existe em nosso banco!")
+            time.sleep(2)
+            os.system("cls")
+            return False
+
+    return True
+
+
+def criar_usuario(usuarios):
+    cpf = input("Insira seu CPF: ")
+
+    if verificar_existe_cpf(cpf, usuarios) == True:
+        if verificar_numero_cpf(cpf=cpf) == True:
+                nome = input("Insira seu o nome: ")
+                data_nasc = input("Insira sua data de nascimento: ")
+                logradouro = input("Insira seu logradouro: ")
+                nmr = input("Insira o número de sua residência: ")
+                bairro = input("Insira o bairro em que você mora: ")
+                cidade_estado = input("Insira sua cidade/estado: ")
+
+                usuarios.append({"cpf": cpf, "nome": nome, "data_nasc": data_nasc, "emprego": {"logradouro": logradouro, "nmr": nmr, "bairro": bairro, "cidade/estado": cidade_estado}})
+                
+                print("Usuário criado com sucesso!")
+
+                time.sleep(2)
+                os.system("cls")
+
+                return usuarios
+
+        else:
+            pass
+
+
+def listar_usuarios(usuarios):
+    print("=================================================")
+    for usuario in usuarios:
+        print(f"CPF: {usuario['cpf']}")
+        print(f"Nome: {usuario['nome']}")
+        print(f"Data de nascimento: {usuario['data_nasc']}")
+        print(f"Logradouro: {usuario['emprego']["logradouro"]}")
+        print(f"Número da residência: {usuario['emprego']["nmr"]}")
+        print(f"Bairro: {usuario['emprego']["bairro"]}")
+        print(f"Cidade/Estado: {usuario['emprego']["cidade/estado"]}")
+        print("=================================================")
+
+    if len(usuarios) == 0:
+        print("Não há usuários registrados!")
+        time.sleep(2)
+        os.system("cls")
+
+    os.system("pause")
+    os.system("cls")
+        
+
+def selecionar_usuario(cpf, usuarios):
+    for usuario in usuarios:
+        if cpf == usuario['cpf']:
+            return usuario['nome']
+    
+    else:
+        print("Esse CPF ainda não foi cadastrado!")
+        time.sleep(2)
+        os.system("cls")
+
+
+def criar_conta(agencia, numero, usuarios, contas):
+    cpf = input("Insira seu CPF: ")
+    
+    if verificar_numero_cpf(cpf=cpf) == True:
+        usuario = selecionar_usuario(cpf, usuarios)
+        #print(usuario)
+
+        if usuario != None:
+            contas.append({"agencia": agencia, "numero_da_conta": numero, "usuario": usuario})
+
+            print("Conta corrente criada com sucesso!")
+
+            time.sleep(2)
+            os.system("cls")
+            
+            return contas
+
+    else:
+        pass 
+
+
+def listar_contas(contas):
+    print("=================================================")
+    for conta in contas:
+        print(f"Agência: {conta['agencia']}")
+        print(f"Nº Conta corrente: {conta['numero_da_conta']}")
+        print(f"Titular: {conta['usuario']}")
+        print("=================================================")
+
+    if len(contas) == 0:
+        print("Não há contas corrente registradas!")
+        time.sleep(2)
+        os.system("cls")
+
+    os.system("pause")
+    os.system("cls")
+
 
 def valor_negativo(x):
     if x > 0:
@@ -66,7 +183,7 @@ def sacar_dinheiro(saque, lista):
         time.sleep(2)
 
 
-def extrato(depositos, saques):
+def extrato(saques, /, *, depositos):
     global saldo
 
     txt = "============== EXTRATO ==============\n"
@@ -107,64 +224,94 @@ def extrato(depositos, saques):
     print(txt)
     os.system("pause")
 
-
-# Váriaveis principais do programa
-saldo = 500
-lista_deposito = []
-lista_saques = []
-indicador_limite_saque = 1
-LIMITE_SAQUE = 3
-
-
-
 # ====== MENU ======
-menu = """
-    ====== Seja bem-vindo! ======
+def main():
+    # Váriaveis principais do programa
+    global indicador_limite_saque
+    LIMITE_SAQUE = 3
+    N_AGENCIA = '0001'  
 
-        [d] -> Depósito
-        [s] -> Saque
-        [e] -> Extrato
-        [q] -> Sair
+    lista_deposito = []
+    lista_saques = []
+    usuarios = []
+    numero_da_conta = 1
+    contas = []
 
-"""
+    menu = """
+        ====== Seja bem-vindo! ======
 
-while True:
-    print(menu)
+            [nu] -> Novo Usuário
+            [lu] -> Listar Usuários
+            [cc] -> Criar Conta Corrente
+            [lc] -> Listar Contas Corrente
+            [d] -> Depósito
+            [s] -> Saque
+            [e] -> Extrato
+            [q] -> Sair
 
-    opcao = input("-> ")
+    """
 
-    #Depósito
-    if opcao == "d":
-        deposito = float(input("Insira o valor que deseja depositar: "))
-        depositar(deposito, lista_deposito)
-        # os.system("cls") serve para executar o comando cls no sistema, assim limpando o conteúdo do terminal
-        os.system("cls")
+    while True:
+        print(menu)
 
-    elif opcao == "s":
-        #print("Saque")
+        opcao = input("-> ")
 
-        # Verificação do limite diário
-        if indicador_limite_saque <= LIMITE_SAQUE:
-            saque = float(input("Insira o valor que deseja sacar: "))
-            sacar_dinheiro(saque, lista_saques)
+        # Novo usuário
+        if opcao == "nu":
+            criar_usuario(usuarios)
+        
+        # Listar usuário
+        elif opcao == "lu":
+            listar_usuarios(usuarios)
+            
+        # Criar conta corrente
+        elif opcao == "cc":
+            numero_da_conta = len(contas) + 1
+            criar_conta(N_AGENCIA, numero_da_conta, usuarios, contas)
+
+        # Listando contas corrente
+        elif opcao == "lc":
+            listar_contas(contas)
+
+        # Depósito
+        elif opcao == "d":
+            deposito = float(input("Insira o valor que deseja depositar: "))
+            depositar(deposito, lista_deposito)
+            # os.system("cls") serve para executar o comando cls no sistema, assim limpando o conteúdo do terminal
             os.system("cls")
+
+        elif opcao == "s":
+            #print("Saque")
+
+            # Verificação do limite diário
+            if indicador_limite_saque <= LIMITE_SAQUE:
+                saque = float(input("Insira o valor que deseja sacar: "))
+                sacar_dinheiro(saque=saque, lista=lista_saques)
+                os.system("cls")
+            else:
+                print("Máximo de saques diários atingido!")
+                time.sleep(2)
+                os.system("cls")
+
+        elif opcao == "e":
+            extrato(lista_saques, depositos=lista_deposito)
+            os.system("cls")
+
+        elif opcao == "q":
+            # Paro o sistema
+            print("Agradeçemos por usar nosso sistema!")
+            time.sleep(2)
+            os.system("cls")
+            break
+        
         else:
-            print("Máximo de saques diários atingido!")
+            print("Operação inválida! Por favor selecione novamente a operação desejada.")
             time.sleep(2)
             os.system("cls")
 
-    elif opcao == "e":
-        extrato(lista_deposito, lista_saques)
-        os.system("cls")
 
-    elif opcao == "q":
-        # Paro o sistema
-        print("Agradeçemos por usar nosso sistema!")
-        time.sleep(2)
-        os.system("cls")
-        break
-    
-    else:
-        print("Operação inválida! Por favor selecione novamente a operação desejada.")
-        time.sleep(2)
-        os.system("cls")
+# Váriavel global de saque
+saldo = 500
+indicador_limite_saque = 1
+
+main()

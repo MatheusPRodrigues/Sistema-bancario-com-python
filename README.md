@@ -13,6 +13,12 @@ Para executar o sistema, basta clonar o repositório e baixar os arquivos do rep
 ```
 Após fazer isso, basta executar o arquivo banco.py com a IDE de sua preferência.
 
+## Atualização do sistema bancário 
+
+A proposta desta vez foi realizar uma modularização no código, com o objetivo de alcançar melhor visibilidade e treinar a utilização de funções e os meios de passar os parâmetros (posicional | chave e valor). Além disso foram implementadas duas novas funções no código, que são:
+- Criar um novo usuário no sistema;
+- Criar uma nova conta corrente no sistema.
+
 ### Agradeço a atenção
 
 ### Att
