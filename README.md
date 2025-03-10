@@ -19,6 +19,10 @@ A proposta desta vez foi realizar uma modularização no código, com o objetivo
 - Criar um novo usuário no sistema;
 - Criar uma nova conta corrente no sistema.
 
+## Atualização 09/03/2025
+
+Nesta atualização é feita a adição do banco projetado com o paradigma POO - Programação Orientada a Objeto. Programa feito em conjunto com o professor do curso. Posteriormente adicionarei um README apenas para o novo programa.
+
 ### Agradeço a atenção
 
 ### Att
